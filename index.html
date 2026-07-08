@@ -63,6 +63,8 @@
     --ink: #33392f;
     --ink-soft: #5a6152;
     --lavender: #e4dff0;
+    --wa-green: #3d8a5f;
+    --wa-green-dark: #2f6d49;
     --radius-lg: 28px;
     --radius-md: 18px;
     --max-w: 1180px;
@@ -91,12 +93,12 @@
     padding:16px 30px;border-radius:100px;font-weight:600;font-size:15px;
     transition:all .25s ease;cursor:pointer;border:none;
   }
-  .btn-primary{background:var(--sage-dark);color:#fff;}
-  .btn-primary:hover{background:var(--terracotta);transform:translateY(-2px);}
+  .btn-primary{background:var(--wa-green);color:#fff;}
+  .btn-primary:hover{background:var(--wa-green-dark);transform:translateY(-2px);}
   .btn-outline{background:transparent;color:var(--ink);border:1.5px solid var(--ink);}
   .btn-outline:hover{background:var(--ink);color:#fff;}
-  .btn-whatsapp{background:#3d8a5f;color:#fff;}
-  .btn-whatsapp:hover{background:#2f6d49;transform:translateY(-2px);}
+  .btn-whatsapp{background:var(--wa-green);color:#fff;}
+  .btn-whatsapp:hover{background:var(--wa-green-dark);transform:translateY(-2px);}
 
   /* ICONS */
   .icon{width:20px;height:20px;flex-shrink:0;display:inline-block;vertical-align:middle;}
@@ -130,15 +132,21 @@
     background:rgba(251,248,242,0.85);backdrop-filter:blur(10px);
     border-bottom:1px solid rgba(90,97,82,0.08);
   }
-  .nav{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;max-width:var(--max-w);margin:0 auto;}
-  .logo{font-family:'Parkinsans',sans-serif;font-size:22px;font-weight:600;color:var(--sage-dark);}
-  .logo span{color:var(--terracotta);}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;max-width:var(--max-w);margin:0 auto;position:relative;}
+  .logo{font-family:'Parkinsans',sans-serif;font-size:22px;font-weight:600;color:var(--sage-dark);white-space:nowrap;}
+  .logo .dot{color:var(--terracotta);}
   .nav-links{display:flex;gap:36px;font-size:15px;font-weight:500;}
   .nav-links a{opacity:.8;transition:opacity .2s;}
   .nav-links a:hover{opacity:1;color:var(--sage-dark);}
   .nav-cta{display:flex;align-items:center;gap:18px;}
-  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;}
   .burger span{width:24px;height:2px;background:var(--ink);border-radius:2px;}
+  .nav-links.mobile-open{
+    display:flex !important;position:absolute;top:100%;left:0;right:0;flex-direction:column;
+    background:var(--cream);padding:22px 32px 26px;gap:16px;
+    box-shadow:0 20px 40px -18px rgba(51,57,47,.3);
+    border-bottom:1px solid rgba(90,97,82,.08);
+  }
 
   /* HERO */
   .hero{
@@ -307,7 +315,7 @@
 
   @media (max-width:640px){
     .blog-grid{overflow-x:visible;flex-wrap:wrap;padding-bottom:0;}
-    .blog-item.ig-embed{flex:0 0 calc(50% - 10px);height:380px;}
+    .blog-item.ig-embed{flex:0 0 100%;width:100%;height:520px;}
     .blog-item.ig-embed:nth-child(n+3){display:none;}
     .blog-grid.show-all .blog-item.ig-embed:nth-child(n+3){display:flex;}
     .blog-more-btn{
@@ -352,6 +360,15 @@
     .sobre-img{height:320px;}
     .badge{right:12px;bottom:-18px;}
     .areas-wrap{padding:28px;}
+
+    /* logo curto no mobile */
+    .logo-rest{display:none;}
+
+    /* colagem do hero redimensionada e centralizada */
+    .hero-visual{height:300px;max-width:280px;margin:28px auto 0;}
+    .hero-img.main{width:190px;height:250px;top:0;left:50%;transform:translateX(-72%);}
+    .hero-img.accent{width:140px;height:170px;top:110px;left:50%;transform:translateX(8%);}
+    .float-card{display:none;}
   }
 </style>
 </head>
@@ -359,7 +376,7 @@
 
 <header>
   <nav class="nav">
-    <a href="#" class="logo">Patrícia dos Anjos<span>.</span></a>
+    <a href="#" class="logo">Patrícia<span class="logo-rest"> dos Anjos</span><span class="dot">.</span></a>
     <ul class="nav-links">
       <li><a href="#sobre">Sobre</a></li>
       <li><a href="#servicos">Atendimentos</a></li>
@@ -604,6 +621,27 @@
       moreBtn.addEventListener('click', function(){
         var expanded = blogGrid.classList.toggle('show-all');
         moreBtn.textContent = expanded ? 'Ver menos' : 'Ver mais publicações';
+      });
+    }
+  })();
+
+  (function(){
+    var burger = document.querySelector('.burger');
+    var navLinks = document.querySelector('.nav-links');
+    if(burger && navLinks){
+      burger.addEventListener('click', function(e){
+        e.stopPropagation();
+        navLinks.classList.toggle('mobile-open');
+      });
+      navLinks.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click', function(){
+          navLinks.classList.remove('mobile-open');
+        });
+      });
+      document.addEventListener('click', function(e){
+        if(navLinks.classList.contains('mobile-open') && !navLinks.contains(e.target) && e.target !== burger){
+          navLinks.classList.remove('mobile-open');
+        }
       });
     }
   })();
